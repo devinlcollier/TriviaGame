@@ -72,51 +72,71 @@ class question{
 
 		parent.append(temp);
 	}
+
+	showAnswer(parrent)
+	{
+
+	}
 }
 
 var game = {
-	questions: [],
-	current_question: -1,
-	score: 0,
-	time_remaining: 30,
-	timer: null,
-	start_button: null,
+    questions: [],
+    current_question: -1,
+    score: 0,
+    time_remaining: 30,
+    timer: null,
+    start_button: null,
 
-	newGame: function()
-	{
-		game.start_button.hide();
-		game.score = 0;
-		game.questions = arrayShuffle(game.questions);
-		game.nextQuestion();
-	},
+    newGame: function()
+    {
+        game.start_button.hide();
+        game.score = 0;
+        for (var i = game.questions.length - 1; i > 0; i--)
+        {
+            var r = randInt(0, i);
+            var temp = game.questions[i];
+            game.questions[i] = game.questions[r];
+            game.questions[r] = temp;
+        }
+        game.nextQuestion();
+    },
 
-	nextQuestion: function()
-	{
-		$("#question").empty();
-		game.current_question++;
-		game.questions[game.current_question].show($("#question"));
-		game.timer = setInterval(game.tick, 1000);
-		game.time_remaining = 30;
-	},
+    nextQuestion: function()
+    {
+        $("#question").empty();
+        game.current_question++;
+		clearInterval(game.timer);
+        if(game.current_question === game.questions.length)
+        {
+        	game.start_button.show();
+        	$("#question").append("<p class=\"text-center\"> Game Over! </p>");
+        	return;
+        }
+        
+        game.questions[game.current_question].show($("#question"));
+        game.timer = setInterval(game.tick, 1000);
+        game.time_remaining = 30;
+    },
 
-	isAnswer(answer_text)
-	{
-		if(answer_text === game.questions[game.current_question].answer)
-		{
-			console.log("CORRECT!");
-		}
-	},
+    isAnswer(answer_text)
+    {
+        if (answer_text === game.questions[game.current_question].answer)
+        {
+        	game.score++;
+        	$("#score").text("Score: " + game.score);
+            game.questions[game.current_question].showAnswer($("#question"));
+        }
+    },
 
-	tick()
-	{
-		game.time_remaining--;
-		if(game.time_remaining === 0)
-		{
-			game.nextQuestion();
-		}
-
-		$("#timer").text("Time Remaing: " + game.time_remaining + " seconds");
-	}
+    tick()
+    {
+        game.time_remaining--;
+        $("#timer").text("Time Remaing: " + game.time_remaining + " seconds");
+        if (game.time_remaining === 0)
+        {
+            game.nextQuestion();
+        }
+    }
 };
 
 const path = "assets/images/";

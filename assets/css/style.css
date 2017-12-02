@@ -1,0 +1,25 @@
+body{
+	background-image: url("../images/space_background.webp");
+}
+
+h1{
+	font-size: 50px;
+}
+
+h2{
+	font-size: 24px;
+}
+
+#game_container{
+	background-color: #ccdfff;
+}
+
+.text-box{
+	text-align: center;
+	font-size: 30px;
+}
+
+.question-box{
+	text-align: center;
+	font-size: 22px;
+}
